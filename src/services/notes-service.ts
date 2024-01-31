@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto'
 import cache from '../configs/cache-config'
 import { type TNotes } from '../commons/types-common'
 import { type TNote, type IReturn } from '../commons/interfaces-common'
+import { NotesError } from '../commons/errors-common'
 
 class NotesService {
   #getNoteIndexById (notes: TNote): number | undefined {
@@ -11,105 +12,130 @@ class NotesService {
   }
 
   createNotes (notes: TNote): IReturn {
-    console.log(`NotesService.createNotes: ${JSON.stringify(notes)}`)
-    const allNotes: TNotes = cache.get('notes')
+    try {
+      console.log(`NotesService.createNotes: ${JSON.stringify(notes)}`)
+      const allNotes: TNotes = cache.get('notes')
 
-    if (allNotes == null) {
-      cache.set('notes', [{ id: randomUUID(), ...notes }])
-    } else {
-      allNotes?.push({ id: randomUUID(), ...{ ...notes } })
-      cache.set('notes', allNotes)
-    }
-
-    return {
-      status: 200,
-      data: {
-        message: 'Notes successfully recorded!'
+      if (allNotes == null) {
+        cache.set('notes', [{ id: randomUUID(), ...notes }])
+      } else {
+        allNotes?.push({ id: randomUUID(), ...{ ...notes } })
+        cache.set('notes', allNotes)
       }
+
+      return {
+        status: 200,
+        data: {
+          message: 'Notes successfully recorded!'
+        }
+      }
+    } catch (error) {
+      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      throw new NotesError('NotesService.createNotes', 500)
     }
   }
 
   getAllNotes (): IReturn {
-    console.log('NotesService.getAllNotes')
-    const result: TNotes = cache.get('notes')
-    return {
-      status: 200,
-      data: {
-        message: 'All notes successfully retrieved!',
-        notes: result
+    try {
+      console.log('NotesService.getAllNotes')
+      const result: TNotes = cache.get('notes')
+      return {
+        status: 200,
+        data: {
+          message: 'All notes successfully retrieved!',
+          notes: result
+        }
       }
+    } catch (error) {
+      console.error(`NotesService.getAllNotes: ${JSON.stringify(error)}`)
+      throw new NotesError('NotesService.getAllNotes', 500)
     }
   }
 
   getNotesById (notesId: string): IReturn {
-    console.log(`NotesService.getNotesById: ${notesId}`)
-    const allNotes: TNotes = cache.get('notes')
-    const notesIndex: number | undefined = allNotes?.findIndex(i => i.id === notesId)
+    try {
+      console.log(`NotesService.getNotesById: ${notesId}`)
+      const allNotes: TNotes = cache.get('notes')
+      const notesIndex: number | undefined = allNotes?.findIndex(i => i.id === notesId)
 
-    if (notesIndex !== undefined && allNotes !== undefined) {
-      const result = [allNotes[notesIndex]]
-      return {
-        status: 200,
-        data: {
-          message: 'Note has been successfully retrieved!',
-          notes: result
+      if (notesIndex !== undefined && allNotes !== undefined) {
+        const result = [allNotes[notesIndex]]
+        return {
+          status: 200,
+          data: {
+            message: 'Note has been successfully retrieved!',
+            notes: result
+          }
+        }
+      } else {
+        return {
+          status: 400,
+          data: {
+            message: 'Notes not found!',
+            notes: []
+          }
         }
       }
-    } else {
-      return {
-        status: 400,
-        data: {
-          message: 'Notes not found!',
-          notes: []
-        }
-      }
+    } catch (error) {
+      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      throw new NotesError('NotesService.createNotes', 500)
     }
   }
 
   updateNotesById (notes: TNote): IReturn {
-    console.log(`NotesService.updateNotesById: ${JSON.stringify(notes)}`)
-    const allNotes: TNotes = cache.get('notes')
-    const noteIndex: number | undefined = this.#getNoteIndexById(notes)
+    try {
+      console.log(`NotesService.updateNotesById: ${JSON.stringify(notes)}`)
+      const allNotes: TNotes = cache.get('notes')
+      const noteIndex: number | undefined = this.#getNoteIndexById(notes)
 
-    if ((noteIndex !== undefined) && (allNotes !== undefined) && (notes.id != null)) {
-      allNotes[noteIndex] = { id: notes.id, ...{ ...notes } }
-      cache.set('notes', allNotes)
-      return {
-        status: 200,
-        data: {
-          message: 'Note has been successfully updated!'
+      if ((noteIndex !== undefined) && (allNotes !== undefined) && (notes.id != null)) {
+        allNotes[noteIndex] = { id: notes.id, ...{ ...notes } }
+        cache.set('notes', allNotes)
+        return {
+          status: 200,
+          data: {
+            message: 'Note has been successfully updated!'
+          }
+        }
+      } else {
+        return {
+          status: 400,
+          data: {
+            message: 'Notes not found!',
+            notes: []
+          }
         }
       }
-    } else {
-      return {
-        status: 400,
-        data: {
-          message: 'Notes not found!',
-          notes: []
-        }
-      }
+    } catch (error) {
+      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      throw new NotesError('NotesService.createNotes', 500)
     }
   }
 
   deleteNotesById (notesId: string): IReturn {
-    console.log(`NotesService.deleteNotesById: ${notesId}`)
-    let allNotes: TNotes = cache.get('notes')
-    if (allNotes !== undefined) {
-      allNotes = allNotes.filter(i => i.id !== notesId)
-      cache.set('notes', allNotes)
-      return {
-        status: 200,
-        data: {
-          message: 'Note has been successfully removed!'
+    try {
+      console.log(`NotesService.deleteNotesById: ${notesId}`)
+      let allNotes: TNotes = cache.get('notes')
+      if (allNotes !== undefined) {
+        allNotes = allNotes.filter(i => i.id !== notesId)
+        cache.set('notes', allNotes)
+        return {
+          status: 200,
+          data: {
+            message: 'Note has been successfully removed!'
+          }
+        }
+      } else {
+        return {
+          status: 400,
+          data: {
+            message: 'Notes not found!'
+          }
         }
       }
-    } else {
-      return {
-        status: 400,
-        data: {
-          message: 'Notes not found!'
-        }
-      }
+    } catch (error) {
+      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      throw new NotesError('NotesService.createNotes', 500)
     }
   }
 }
