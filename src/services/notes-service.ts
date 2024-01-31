@@ -3,17 +3,18 @@ import cache from '../configs/cache-config'
 import { type TNotes } from '../commons/types-common'
 import { type TNote, type IReturn } from '../commons/interfaces-common'
 import { NotesError } from '../commons/errors-common'
+import logger from '../utils/logger-util'
 
 class NotesService {
   #getNoteIndexById (notes: TNote): number | undefined {
-    console.log(`NotesService.getAllNotes: ${JSON.stringify(notes)}`)
+    logger.info(`NotesService.getAllNotes: ${JSON.stringify(notes)}`)
     const allNotes: TNotes = cache.get('notes')
     return allNotes?.findIndex(i => i.id === notes.id)
   }
 
   createNotes (notes: TNote): IReturn {
     try {
-      console.log(`NotesService.createNotes: ${JSON.stringify(notes)}`)
+      logger.info(`NotesService.createNotes: ${JSON.stringify(notes)}`)
       const allNotes: TNotes = cache.get('notes')
 
       if (allNotes == null) {
@@ -30,14 +31,14 @@ class NotesService {
         }
       }
     } catch (error) {
-      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      logger.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
       throw new NotesError('NotesService.createNotes', 500)
     }
   }
 
   getAllNotes (): IReturn {
     try {
-      console.log('NotesService.getAllNotes')
+      logger.info('NotesService.getAllNotes')
       const result: TNotes = cache.get('notes')
       return {
         status: 200,
@@ -47,14 +48,14 @@ class NotesService {
         }
       }
     } catch (error) {
-      console.error(`NotesService.getAllNotes: ${JSON.stringify(error)}`)
+      logger.error(`NotesService.getAllNotes: ${JSON.stringify(error)}`)
       throw new NotesError('NotesService.getAllNotes', 500)
     }
   }
 
   getNotesById (notesId: string): IReturn {
     try {
-      console.log(`NotesService.getNotesById: ${notesId}`)
+      logger.info(`NotesService.getNotesById: ${notesId}`)
       const allNotes: TNotes = cache.get('notes')
       const notesIndex: number | undefined = allNotes?.findIndex(i => i.id === notesId)
 
@@ -77,14 +78,14 @@ class NotesService {
         }
       }
     } catch (error) {
-      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      logger.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
       throw new NotesError('NotesService.createNotes', 500)
     }
   }
 
   updateNotesById (notes: TNote): IReturn {
     try {
-      console.log(`NotesService.updateNotesById: ${JSON.stringify(notes)}`)
+      logger.info(`NotesService.updateNotesById: ${JSON.stringify(notes)}`)
       const allNotes: TNotes = cache.get('notes')
       const noteIndex: number | undefined = this.#getNoteIndexById(notes)
 
@@ -107,14 +108,14 @@ class NotesService {
         }
       }
     } catch (error) {
-      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      logger.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
       throw new NotesError('NotesService.createNotes', 500)
     }
   }
 
   deleteNotesById (notesId: string): IReturn {
     try {
-      console.log(`NotesService.deleteNotesById: ${notesId}`)
+      logger.info(`NotesService.deleteNotesById: ${notesId}`)
       let allNotes: TNotes = cache.get('notes')
       if (allNotes !== undefined) {
         allNotes = allNotes.filter(i => i.id !== notesId)
@@ -134,7 +135,7 @@ class NotesService {
         }
       }
     } catch (error) {
-      console.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
+      logger.error(`NotesService.createNotes: ${JSON.stringify(error)}`)
       throw new NotesError('NotesService.createNotes', 500)
     }
   }
