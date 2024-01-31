@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "329495b0-8f9d-4776-ad22-d60ca6d887f5",
+		"name": "Notes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12614600"
+	},
+	"item": [
+		{
+			"name": "Create Notes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    // \"title\": \"Title 1\",\n    // \"body\": \"Body 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/notes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"notes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve All Notes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/notes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"notes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrive Notes By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/notes/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"notes",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "aa7558db-443e-410e-ae84-af189cd1fca4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Notes By Id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Title 0\",\n    \"body\": \"Body 0\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/notes/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"notes",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "aa7558db-443e-410e-ae84-af189cd1fca4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Notes By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/notes/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"notes",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "aa7558db-443e-410e-ae84-af189cd1fca4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
