@@ -10,5 +10,6 @@ export interface IReturn {
 
 export interface TNote {
   id?: string
-  value: string
+  title: string
+  body: string
 }

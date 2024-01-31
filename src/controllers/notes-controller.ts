@@ -3,7 +3,7 @@ import NotesService from '../services/notes-service'
 import { type TNote } from '../commons/interfaces-common'
 
 export function createNotes (req: Request, res: Response): void {
-  const notes: string = req.body.notes
+  const notes: TNote = req.body
   const notesService = new NotesService()
   const result = notesService.createNotes(notes)
   res.status(result.status)
@@ -28,7 +28,7 @@ export function getNotesById (req: Request, res: Response): void {
 export function updateNotesById (req: Request, res: Response): void {
   const notes: TNote = {
     id: req.params.id,
-    value: req.body.notes
+    ...req.body
   }
   const notesService = new NotesService()
   const result = notesService.updateNotesById(notes)

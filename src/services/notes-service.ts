@@ -5,18 +5,19 @@ import { type TNote, type IReturn } from '../commons/interfaces-common'
 
 class NotesService {
   #getNoteIndexById (notes: TNote): number | undefined {
+    console.log(`NotesService.getAllNotes: ${JSON.stringify(notes)}`)
     const allNotes: TNotes = cache.get('notes')
     return allNotes?.findIndex(i => i.id === notes.id)
   }
 
-  createNotes (notes: string): IReturn {
-    console.log(`NotesService.createNotes: ${notes}`)
+  createNotes (notes: TNote): IReturn {
+    console.log(`NotesService.createNotes: ${JSON.stringify(notes)}`)
     const allNotes: TNotes = cache.get('notes')
 
     if (allNotes == null) {
-      cache.set('notes', [{ id: randomUUID(), value: notes }])
+      cache.set('notes', [{ id: randomUUID(), ...notes }])
     } else {
-      allNotes?.push({ id: randomUUID(), value: notes })
+      allNotes?.push({ id: randomUUID(), ...{ ...notes } })
       cache.set('notes', allNotes)
     }
 
@@ -50,7 +51,7 @@ class NotesService {
       return {
         status: 200,
         data: {
-          message: 'All notes successfully retrieved!',
+          message: 'Note has been successfully retrieved!',
           notes: result
         }
       }
@@ -58,7 +59,7 @@ class NotesService {
       return {
         status: 400,
         data: {
-          message: 'All notes successfully retrieved!',
+          message: 'Notes not found!',
           notes: []
         }
       }
@@ -71,7 +72,7 @@ class NotesService {
     const noteIndex: number | undefined = this.#getNoteIndexById(notes)
 
     if ((noteIndex !== undefined) && (allNotes !== undefined) && (notes.id != null)) {
-      allNotes[noteIndex] = { id: notes.id, value: notes.value }
+      allNotes[noteIndex] = { id: notes.id, ...{ ...notes } }
       cache.set('notes', allNotes)
       return {
         status: 200,
@@ -83,7 +84,7 @@ class NotesService {
       return {
         status: 400,
         data: {
-          message: 'All notes successfully retrieved!',
+          message: 'Notes not found!',
           notes: []
         }
       }
@@ -106,7 +107,7 @@ class NotesService {
       return {
         status: 400,
         data: {
-          message: 'Note does not exist!'
+          message: 'Notes not found!'
         }
       }
     }
